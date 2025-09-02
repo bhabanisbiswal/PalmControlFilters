@@ -80,7 +80,7 @@ def is_pinch(thumb, index, threshold=30):
     dist = np.hypot(thumb[0] - index[0], thumb[1] - index[1])
     return dist < threshold
 
-# --- Main Loop ---
+
 last_pinch_time = 0
 debounce_interval = 0.5  
 
