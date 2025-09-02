@@ -3,7 +3,7 @@
 # ✋ PalmControlFilters
 
 This project applies **real-time video filters** using **hand gestures** 🖐️ with **OpenCV** 🎥 and **MediaPipe** 🤖.
-By performing a **pinch gesture** with your thumb and index finger, you can cycle through filters like **Black & White**, **Invert**, **Thermal**, and **Depth**, which are applied dynamically inside the region formed by your hands.
+By performing a **pinch gesture** with your thumb and index finger, you can cycle through filters like **Black & White**, **Invert**, **Thermal**, and **Depth** and 6 other filters which are applied dynamically inside the region formed by your hands.
 
 ---
 
@@ -11,7 +11,7 @@ By performing a **pinch gesture** with your thumb and index finger, you can cycl
 
 * 🎥 **Real-time hand gesture detection** using webcam.
 * 🖐️ Control filters with simple **pinch gestures**.
-* 🎨 Multiple filters – Black & White, Invert, Thermal, Depth.
+* 🎨 Multiple filters – Black & White, Invert, Thermal, Depth Sepia, Sketch, Cool, Hot, Blur, Mirror.
 * 🔲 Filters applied **only inside hand regions** for dynamic visuals.
 * 🖥 Works on any system with a camera.
 
