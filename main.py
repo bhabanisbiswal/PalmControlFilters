@@ -32,11 +32,44 @@ def filter_depth(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     return cv2.applyColorMap(gray, cv2.COLORMAP_BONE)
 
+def filter_sepia(frame):
+    sepia_filter = np.array([[0.272, 0.534, 0.131],
+                             [0.349, 0.686, 0.168],
+                             [0.393, 0.769, 0.189]])
+    sepia = cv2.transform(frame, sepia_filter)
+    return np.clip(sepia, 0, 255).astype(np.uint8)
+
+def filter_sketch(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    inv = cv2.bitwise_not(gray)
+    blur = cv2.GaussianBlur(inv, (21, 21), 0)
+    sketch = cv2.divide(gray, 255 - blur, scale=256)
+    return cv2.cvtColor(sketch, cv2.COLOR_GRAY2BGR)
+
+def filter_cool(frame):
+    return cv2.applyColorMap(frame, cv2.COLORMAP_COOL)
+
+def filter_hot(frame):
+    return cv2.applyColorMap(frame, cv2.COLORMAP_HOT)
+
+def filter_blur(frame):
+    return cv2.GaussianBlur(frame, (15, 15), 0)
+
+def filter_mirror(frame):
+    return cv2.flip(frame, 1)
+
+
 filters = {
     'Black & White': filter_bw,
     'Invert': filter_invert,
     'Thermal': filter_thermal,
-    'Depth': filter_depth
+    'Depth': filter_depth,
+    'Sepia': filter_sepia,
+    'Sketch': filter_sketch,
+    'Cool': filter_cool,
+    'Hot': filter_hot,
+    'Blur': filter_blur,
+    'Mirror': filter_mirror
 }
 filter_names = list(filters.keys())
 current_filter = 0
@@ -47,9 +80,9 @@ def is_pinch(thumb, index, threshold=30):
     dist = np.hypot(thumb[0] - index[0], thumb[1] - index[1])
     return dist < threshold
 
-
+# --- Main Loop ---
 last_pinch_time = 0
-debounce_interval = 0.5 
+debounce_interval = 0.5  
 
 try:
     while True:
@@ -84,7 +117,7 @@ try:
                 mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
             if left_hand_points and right_hand_points:
-                
+            
                 pts = np.array([left_hand_points[1], right_hand_points[1],
                                 right_hand_points[0], left_hand_points[0]], np.int32)
                 cv2.polylines(frame, [pts], isClosed=True, color=(0, 255, 0), thickness=2)
@@ -93,24 +126,24 @@ try:
                 cv2.fillPoly(mask, [pts], 255)
                 mask3 = cv2.merge([mask, mask, mask]) // 255
 
-                
+              
                 filter_func = filters[filter_names[current_filter]]
                 filtered = filter_func(frame)
                 output = (filtered * mask3 + frame * (1 - mask3)).astype(np.uint8)
 
-                
+              
                 cv2.putText(output, filter_names[current_filter], (10, 30),
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0,0), 2)
-                cv2.imshow('Hand Gesture Filter', output)
+                            cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                cv2.imshow('PalmControlFilters', output)
 
-                
+               
                 if pinch_detected and (time.time() - last_pinch_time > debounce_interval):
                     current_filter = (current_filter + 1) % len(filters)
                     last_pinch_time = time.time()
             else:
-                cv2.imshow('Hand Gesture Filter', frame)
+                cv2.imshow('PalmControlFilters', frame)
         else:
-            cv2.imshow('Hand Gesture Filter', frame)
+            cv2.imshow('PalmControlFilters', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
