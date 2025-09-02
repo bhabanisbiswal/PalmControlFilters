@@ -3,7 +3,7 @@ import numpy as np
 import mediapipe as mp
 import time
 
-# --- Initialize MediaPipe Hands ---
+
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands(
@@ -13,10 +13,10 @@ hands = mp_hands.Hands(
     min_tracking_confidence=0.5
 )
 
-# --- Video Capture ---
+
 cap = cv2.VideoCapture(0)
 
-# --- Filter Functions ---
+
 def filter_bw(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     return cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
@@ -41,15 +41,15 @@ filters = {
 filter_names = list(filters.keys())
 current_filter = 0
 
-# --- Pinch Detection Helper ---
+
 def is_pinch(thumb, index, threshold=30):
     """Return True if thumb and index fingertips are close enough."""
     dist = np.hypot(thumb[0] - index[0], thumb[1] - index[1])
     return dist < threshold
 
-# --- Main Loop ---
+
 last_pinch_time = 0
-debounce_interval = 0.5  # seconds
+debounce_interval = 0.5 
 
 try:
     while True:
@@ -84,7 +84,7 @@ try:
                 mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
             if left_hand_points and right_hand_points:
-                # Create ROI polygon
+                
                 pts = np.array([left_hand_points[1], right_hand_points[1],
                                 right_hand_points[0], left_hand_points[0]], np.int32)
                 cv2.polylines(frame, [pts], isClosed=True, color=(0, 255, 0), thickness=2)
@@ -93,17 +93,17 @@ try:
                 cv2.fillPoly(mask, [pts], 255)
                 mask3 = cv2.merge([mask, mask, mask]) // 255
 
-                # Apply filter
+                
                 filter_func = filters[filter_names[current_filter]]
                 filtered = filter_func(frame)
                 output = (filtered * mask3 + frame * (1 - mask3)).astype(np.uint8)
 
-                # Display filter name
+                
                 cv2.putText(output, filter_names[current_filter], (10, 30),
                             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0,0), 2)
                 cv2.imshow('Hand Gesture Filter', output)
 
-                # Change filter on pinch (with debounce)
+                
                 if pinch_detected and (time.time() - last_pinch_time > debounce_interval):
                     current_filter = (current_filter + 1) % len(filters)
                     last_pinch_time = time.time()
