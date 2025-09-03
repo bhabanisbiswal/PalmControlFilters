@@ -106,7 +106,7 @@ python main.py
 
 ## 🔮 Future Improvements
 
-* 🖼 Add more filter effects (Cartoon, Blur, Sepia, etc.).
+* 🖼 Add more filter effects (Cartoon,lens,etc.).
 * 🧠 Integrate with AI-based filters (style transfer).
 * 🌐 Deploy as a web app using Flask or Streamlit.
 
