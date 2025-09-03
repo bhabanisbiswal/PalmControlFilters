@@ -96,7 +96,11 @@ python main.py
 
 ## 📸 Demo
 
-📷 *\[Add screenshots or GIFs of your project output here]*
+![image alt](https://github.com/bhabanisbiswal/PalmControlFilters/blob/c87d2ec450255b3af534bcb23b034e1dd44ed336/demo/demo1.png)
+
+![image alt](https://github.com/bhabanisbiswal/PalmControlFilters/blob/c87d2ec450255b3af534bcb23b034e1dd44ed336/demo/demo2.png)
+
+![image alt](https://github.com/bhabanisbiswal/PalmControlFilters/blob/c87d2ec450255b3af534bcb23b034e1dd44ed336/demo/demo3.png)
 
 ---
 
